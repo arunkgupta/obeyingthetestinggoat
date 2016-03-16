@@ -15,4 +15,4 @@ class HomePageTest(TestCase):
         request = HttpRequest()
         response = home_page(request)
         expected_html = render_to_string('home.html')
-        self.assertTrue(response.content.decode(), expected_html)
+        self.assertEqual(response.content.decode(), expected_html)
