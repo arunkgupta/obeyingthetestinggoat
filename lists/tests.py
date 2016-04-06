@@ -39,13 +39,13 @@ class NewListTest(TestCase):
         self.assertRedirects(response, '/lists/%d/' % (new_list.id,))
 
 
-class ListViewTest(TestCase):
+class NewItemTest(TestCase):
 
     def test_can_save_a_POST_request_to_an_existing_list(self):
         other_list = List.objects.create()
         correct_list = List.objects.create()
 
-        self.client.get(
+        self.client.post(
             '/lists/%d/add_item' % (correct_list.id,),
             data={'item_text': 'A new item for an existing list'},
         )
@@ -65,6 +65,9 @@ class ListViewTest(TestCase):
         )
 
         self.assertRedirects(response, '/lists/%d/' % (correct_list.id,))
+
+
+class ListViewTest(TestCase):
 
     def test_uses_list_template(self):
         list_ = List.objects.create()
@@ -91,16 +94,6 @@ class ListViewTest(TestCase):
         self.assertContains(response, 'itemey 2')
         self.assertNotContains(response, 'other list item 1')
         self.assertNotContains(response, 'other list item 2')
-
-    def test_display_all_items(self):
-        list_ = List.objects.create()
-        Item.objects.create(text='itemey 1', list=list_)
-        Item.objects.create(text='itemey 2', list=list_)
-
-        response = self.client.get('/lists/the-only-list-in-the-world/')
-
-        self.assertContains(response, 'itemey 1')
-        self.assertContains(response, 'itemey 2')
 
 
 class ListAndItemModelsTest(TestCase):
