@@ -32,7 +32,7 @@ def _get_latest_source(source_folder):
 
 def _update_settings(source_folder, site_name):
     settings_path = source_folder + '/superlists/settings.py'
-    sed(settings_path, "DEBUG=True", "DEBUG=False")
+    sed(settings_path, "DEBUG = True", "DEBUG = False")
     sed(settings_path,
         'ALLOWED_HOSTS = .+$',
         'ALLOWED_HOSTS = ["%s"]' + (site_name,))
@@ -45,17 +45,21 @@ def _update_settings(source_folder, site_name):
 
 
 def _update_virtualenv(source_folder):
-    virtualenv_folder =  source_folder + '/../virtualenv'
+    virtualenv_folder = source_folder + '/../virtualenv'
     if not exists(virtualenv_folder + '/bin/pip'):
         run('virtualenv --python=python3 %s' % (virtualenv_folder,))
-    run('%s/bin/pip install -r %s/requirement.txt' % (virtualenv_folder, source_folder))
+    run('%s/bin/pip install -r %s/requirements.txt' % (
+        virtualenv_folder, source_folder
+    ))
 
 
 def _update_static_files(source_folder):
-    run('cd %s && ../virtualenv/bin/python3 manage.py collectstatic --noinput' % (source_folder,))
+    run('cd %s && ../virtualenv/bin/python3 manage.py collectstatic --noinput' % (
+        source_folder,
+    ))
 
 
 def _update_database(source_folder):
-    run('cd %s && ../virtualenv/bin/python3 manage.py migrate --noinput' % (source_folder,))
-
-
+    run('cd %s && ../virtualenv/bin/python3 manage.py migrate --noinput' % (
+        source_folder,
+    ))
