@@ -102,7 +102,6 @@ class ListViewTest(TestCase):
             '/lists/%d/' % (correct_list.id,),
             data={'item_text': 'A new item for an existing list'}
         )
-
         self.assertRedirects(response, '/lists/%d/' % (correct_list.id,))
 
     def test_validation_errors_end_up_on_lists_page(self):
